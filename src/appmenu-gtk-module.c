@@ -50,9 +50,9 @@ static void sync_gtk2_settings()
 
 void gtk_module_init(void)
 {
-	if (gtk_module_should_run())
+	//if (gtk_module_should_run())
 	{
-		sync_gtk2_settings();
+		//sync_gtk2_settings();
 		watch_registrar_dbus();
 		enable_debug();
 		store_pre_hijacked();

@@ -28,6 +28,10 @@
 
 #include <appmenu-gtk-menu-shell.h>
 
+#include <libdbusmenu-glib/server.h>
+#include <libdbusmenu-gtk/parser.h>
+
+
 G_GNUC_INTERNAL G_DEFINE_QUARK(window_data, window_data);
 G_DEFINE_BOXED_TYPE(WindowData, window_data, (GBoxedCopyFunc)window_data_copy,
                     (GBoxedFreeFunc)window_data_free);
@@ -150,14 +154,20 @@ G_GNUC_INTERNAL WindowData *gtk_window_get_window_data(GtkWindow *window)
 
 #if (defined(GDK_WINDOWING_WAYLAND))
 	if (GDK_IS_WAYLAND_DISPLAY(gdk_display_get_default()))
+	{
+		g_print("GDK_IS_WAYLAND_DISPLAY\n");
 		window_data = gtk_wayland_window_get_window_data(window);
+	}
 #endif
 #if (defined(GDK_WINDOWING_X11))
 #if GTK_MAJOR_VERSION == 3
 	if (GDK_IS_X11_DISPLAY(gdk_display_get_default()))
+	{
+		g_print("GDK_IS_X11_DISPLAY\n");
 #endif
 		window_data = gtk_x11_window_get_window_data(window);
 #endif
+	}
 	return window_data;
 }
 
@@ -241,6 +251,13 @@ G_GNUC_INTERNAL void gtk_window_connect_menu_shell(GtkWindow *window, GtkMenuShe
 				                      G_MENU_MODEL(shell));
 
 				window_data->menus = g_slist_append(window_data->menus, shell);
+
+				g_print("dbusmenu_gtk_parse_menu_structure");
+				DbusmenuMenuitem *item = dbusmenu_gtk_parse_menu_structure(GTK_WIDGET(menu_shell));
+				gchar *path = g_strdup_printf("/MenuBar/%d", window_data->window_id);
+				DbusmenuServer *srv = dbusmenu_server_new(path);
+				g_free(path);
+				dbusmenu_server_set_root(srv, item);
 			}
 		}
 

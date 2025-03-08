@@ -25,13 +25,7 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
-#if GTK_MAJOR_VERSION >= 3
-#ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/gdkwayland.h>
-#else
-#define GDK_IS_WAYLAND_DISPLAY(display) 0
-#endif
-#endif
 
 #include <appmenu-gtk-action-group.h>
 #include <appmenu-gtk-menu-shell.h>
@@ -59,9 +53,7 @@ G_GNUC_INTERNAL bool gtk_module_should_run()
 		is_platform_supported = true;
 	else if (GDK_IS_WAYLAND_DISPLAY(gdk_display_get_default()))
 	{
-		g_autoptr(GSettings) gsettings = g_settings_new(UNITY_GTK_MODULE_SCHEMA);
-		bool use_wayland                  = g_settings_get_boolean(gsettings, RUN_ON_WAYLAND);
-		is_platform_supported = use_wayland;
+		is_platform_supported = true;
 	}
 	else
 		is_platform_supported = false;
@@ -192,10 +184,7 @@ static bool set_gtk_shell_shows_menubar(bool shows)
 	g_return_val_if_fail(G_IS_PARAM_SPEC(pspec), false);
 	g_return_val_if_fail(pspec->value_type == G_TYPE_BOOLEAN, false);
 
-	g_autoptr(GSettings) gsettings = g_settings_new(UNITY_GTK_MODULE_SCHEMA);
-	bool need_set                  = !g_settings_get_boolean(gsettings, INNER_MENU_KEY);
-
-	g_object_set(settings, "gtk-shell-shows-menubar", need_set ? shows : false, NULL);
+	g_object_set(settings, "gtk-shell-shows-menubar", shows, NULL);
 
 	return true;
 }

@@ -4,6 +4,7 @@ project(appmenu-gtk-module-wayland)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+pkg_check_modules(DBusMenuGTK3 REQUIRED dbusmenu-gtk3-0.4)
 
 set(CMAKE_C_STANDARD 11)
 
@@ -28,12 +29,13 @@ add_library(appmenu-gtk3-parser SHARED
     "${LIB_DIR}/appmenu-gtk-parser.h"
 )
 
-target_include_directories(appmenu-gtk3-parser PUBLIC ${GTK3_INCLUDE_DIRS})
 target_include_directories(appmenu-gtk3-parser PUBLIC ${LIB_DIR})
+target_include_directories(appmenu-gtk3-parser PUBLIC ${GTK3_INCLUDE_DIRS})
 target_link_libraries(appmenu-gtk3-parser ${GTK3_LIBRARIES})
 #target_compile_definitions(appmenu-gtk3-parser PUBLIC ${GTK3_CFLAGS_OTHER})
 
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(GENERATED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/wayland/generated")
 
 add_library(appmenu-gtk-module-wayland  SHARED
     "${SRC_DIR}/appmenu-gtk-module.c"
@@ -49,7 +51,11 @@ add_library(appmenu-gtk-module-wayland  SHARED
     "${SRC_DIR}/platform.c"
     "${SRC_DIR}/platform.h"
     "${SRC_DIR}/consts.h"
+    "${GENERATED_DIR}/appmenu.c"
 )
+
+target_include_directories(appmenu-gtk-module-wayland PRIVATE "${GENERATED_DIR}" "${DBusMenuGTK3_INCLUDE_DIRS}")
+target_link_libraries(appmenu-gtk-module-wayland PRIVATE appmenu-gtk3-parser ${DBusMenuGTK3_LIBRARIES})
 
 set(TEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 

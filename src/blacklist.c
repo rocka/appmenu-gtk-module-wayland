@@ -66,11 +66,7 @@ static bool is_string_in_array(const char *string, GVariant *array)
 
 static bool is_listed(const char *name, const char *key)
 {
-	GSettings *settings       = g_settings_new(UNITY_GTK_MODULE_SCHEMA);
-	g_autoptr(GVariant) array = g_settings_get_value(settings, key);
-	bool listed               = is_string_in_array(name, array);
-	g_clear_object(&settings);
-	return listed;
+	return true;
 }
 
 G_GNUC_INTERNAL
