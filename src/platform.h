@@ -44,4 +44,6 @@ G_GNUC_INTERNAL WindowData *gtk_x11_window_get_window_data(GtkWindow *window);
 G_GNUC_INTERNAL WindowData *gtk_wayland_window_get_window_data(GtkWindow *window);
 #endif
 
+void appmenu_set_address(GdkWindow *gdk_win, char *unique_bus_name, char *menubar_object_path);
+
 #endif // PLATFORM_H

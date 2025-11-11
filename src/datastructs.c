@@ -173,6 +173,7 @@ G_GNUC_INTERNAL WindowData *gtk_window_get_window_data(GtkWindow *window)
 
 G_GNUC_INTERNAL void gtk_window_disconnect_menu_shell(GtkWindow *window, GtkMenuShell *menu_shell)
 {
+	g_print("gtk_window_disconnect_menu_shell\n");
 	WindowData *window_data;
 	MenuShellData *menu_shell_data;
 
@@ -201,8 +202,8 @@ G_GNUC_INTERNAL void gtk_window_disconnect_menu_shell(GtkWindow *window, GtkMenu
 		{
 			g_menu_remove(window_data->menu_model, i);
 
-			unity_gtk_action_group_disconnect_shell(window_data->action_group,
-			                                        iter->data);
+			// unity_gtk_action_group_disconnect_shell(window_data->action_group,
+			//                                         iter->data);
 
 			g_object_unref(iter->data);
 
@@ -215,6 +216,7 @@ G_GNUC_INTERNAL void gtk_window_disconnect_menu_shell(GtkWindow *window, GtkMenu
 
 G_GNUC_INTERNAL void gtk_window_connect_menu_shell(GtkWindow *window, GtkMenuShell *menu_shell)
 {
+	g_print("gtk_window_connect_menu_shell\n");
 	MenuShellData *menu_shell_data;
 
 	g_return_if_fail(GTK_IS_WINDOW(window));
@@ -252,12 +254,14 @@ G_GNUC_INTERNAL void gtk_window_connect_menu_shell(GtkWindow *window, GtkMenuShe
 
 				window_data->menus = g_slist_append(window_data->menus, shell);
 
-				g_print("dbusmenu_gtk_parse_menu_structure");
+				g_print("dbusmenu_gtk_parse_menu_structure\n");
 				DbusmenuMenuitem *item = dbusmenu_gtk_parse_menu_structure(GTK_WIDGET(menu_shell));
 				gchar *path = g_strdup_printf("/MenuBar/%d", window_data->window_id);
 				DbusmenuServer *srv = dbusmenu_server_new(path);
-				g_free(path);
 				dbusmenu_server_set_root(srv, item);
+				GDBusConnection* connection = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, NULL);
+				char* unique_bus_name =  g_strdup_printf("%s", g_dbus_connection_get_unique_name(connection));
+				appmenu_set_address(gtk_widget_get_window(GTK_WIDGET(window)), unique_bus_name, path);
 			}
 		}
 

@@ -38,6 +38,7 @@ struct _WindowData
 	GMenuModel *old_model;
 	UnityGtkActionGroup *action_group;
 	guint action_group_export_id;
+	// TODO: save org_kde_kwin_appmenu here, and remove UnityGtk* stuff
 };
 
 struct _MenuShellData

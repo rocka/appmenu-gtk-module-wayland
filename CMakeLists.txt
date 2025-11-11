@@ -40,17 +40,10 @@ set(GENERATED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/wayland/generated")
 add_library(appmenu-gtk-module-wayland  SHARED
     "${SRC_DIR}/appmenu-gtk-module.c"
     "${SRC_DIR}/datastructs.c"
-    "${SRC_DIR}/datastructs.h"
-    "${SRC_DIR}/datastructs-private.h"
     "${SRC_DIR}/hijack.c"
-    "${SRC_DIR}/hijack.h"
     "${SRC_DIR}/support.c"
-    "${SRC_DIR}/support.h"
     "${SRC_DIR}/blacklist.c"
-    "${SRC_DIR}/blacklist.h"
     "${SRC_DIR}/platform.c"
-    "${SRC_DIR}/platform.h"
-    "${SRC_DIR}/consts.h"
     "${GENERATED_DIR}/appmenu.c"
 )
 

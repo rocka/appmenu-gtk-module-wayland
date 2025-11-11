@@ -78,24 +78,15 @@ static void hijacked_window_realize(GtkWidget *widget)
 	if (visual && (hint == GDK_WINDOW_TYPE_HINT_DND))
 		gtk_widget_set_visual(widget, visual);
 
-// In Wayland the DBUS Menu need to be register before realize the window.
-#ifdef GDK_WINDOWING_WAYLAND
-	if (GDK_IS_WAYLAND_DISPLAY(gdk_display_get_default()) && is_hint_viable &&
-	    (!GTK_IS_APPLICATION_WINDOW(GTK_WINDOW(widget))))
-		gtk_window_get_window_data(GTK_WINDOW(widget));
-#endif
-
 	if (pre_hijacked_window_realize != NULL)
 		pre_hijacked_window_realize(widget);
 
-#ifdef GDK_WINDOWING_X11
-	if (is_hint_viable
-#if GTK_MAJOR_VERSION == 3
-	    && GDK_IS_X11_DISPLAY(gdk_display_get_default()) && (!GTK_IS_APPLICATION_WINDOW(widget))
-#endif
-	)
+	if (is_hint_viable && !GTK_IS_APPLICATION_WINDOW(GTK_WINDOW(widget)) &&
+		(GDK_IS_X11_DISPLAY(gdk_display_get_default()) || GDK_IS_WAYLAND_DISPLAY(gdk_display_get_default()))
+	) 
+	{
 		gtk_window_get_window_data(GTK_WINDOW(widget));
-#endif
+	}
 }
 
 static void hijacked_window_unrealize(GtkWidget *widget)
