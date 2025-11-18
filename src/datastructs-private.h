@@ -25,7 +25,6 @@
 #ifndef DATASTRUCTSPRIVATE_H
 #define DATASTRUCTSPRIVATE_H
 
-#include <appmenu-gtk-action-group.h>
 #include <gtk/gtk.h>
 
 struct _WindowData

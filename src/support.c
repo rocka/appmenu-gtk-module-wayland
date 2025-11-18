@@ -27,9 +27,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkwayland.h>
 
-#include <appmenu-gtk-action-group.h>
-#include <appmenu-gtk-menu-shell.h>
-
 #include "blacklist.h"
 #include "consts.h"
 #include "support.h"
@@ -67,15 +64,15 @@ G_GNUC_INTERNAL bool gtk_module_should_run()
 	return should_run;
 }
 
-G_GNUC_INTERNAL void enable_debug()
-{
-	unity_gtk_menu_shell_set_debug(is_true(g_getenv("UNITY_GTK_MENU_SHELL_DEBUG")));
-	unity_gtk_action_group_set_debug(is_true(g_getenv("UNITY_GTK_ACTION_GROUP_DEBUG")));
-}
+// G_GNUC_INTERNAL void enable_debug()
+// {
+// 	unity_gtk_menu_shell_set_debug(is_true(g_getenv("UNITY_GTK_MENU_SHELL_DEBUG")));
+// 	unity_gtk_action_group_set_debug(is_true(g_getenv("UNITY_GTK_ACTION_GROUP_DEBUG")));
+// }
 
 G_GNUC_INTERNAL bool gtk_widget_shell_shows_menubar(GtkWidget *widget)
 {
-	return true;
+	// return true;
 	GtkSettings *settings;
 	GParamSpec *pspec;
 	gboolean shell_shows_menubar;

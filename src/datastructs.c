@@ -26,8 +26,6 @@
 #include "datastructs-private.h"
 #include "platform.h"
 
-#include <appmenu-gtk-menu-shell.h>
-
 #include <libdbusmenu-glib/server.h>
 #include <libdbusmenu-gtk/parser.h>
 
@@ -196,7 +194,7 @@ G_GNUC_INTERNAL void gtk_window_disconnect_menu_shell(GtkWindow *window, GtkMenu
 			i++;
 
 		for (iter = window_data->menus; iter != NULL; iter = g_slist_next(iter), i++)
-			if (UNITY_GTK_MENU_SHELL(iter->data)->menu_shell == menu_shell)
+			if (GTK_MENU_SHELL(iter->data) == menu_shell)
 				break;
 
 		if (iter != NULL)
@@ -239,21 +237,21 @@ G_GNUC_INTERNAL void gtk_window_connect_menu_shell(GtkWindow *window, GtkMenuShe
 			GSList *iter;
 
 			for (iter = window_data->menus; iter != NULL; iter = g_slist_next(iter))
-				if (UNITY_GTK_MENU_SHELL(iter->data)->menu_shell == menu_shell)
+				if (GTK_MENU_SHELL(iter->data) == menu_shell)
 					break;
 
 			if (iter == NULL)
 			{
-				UnityGtkMenuShell *shell = unity_gtk_menu_shell_new(menu_shell);
+				// UnityGtkMenuShell *shell = unity_gtk_menu_shell_new(menu_shell);
 
 				// unity_gtk_action_group_connect_shell(window_data->action_group,
 				//                                      shell);
 
-				g_menu_append_section(window_data->menu_model,
-				                      NULL,
-				                      G_MENU_MODEL(shell));
+				// g_menu_append_section(window_data->menu_model,
+				//                       NULL,
+				//                       G_MENU_MODEL(shell));
 
-				window_data->menus = g_slist_append(window_data->menus, shell);
+				window_data->menus = g_slist_append(window_data->menus, menu_shell);
 
 				DbusmenuMenuitem *item = dbusmenu_gtk_parse_menu_structure(GTK_WIDGET(menu_shell));
 				gchar *path = g_strdup_printf("/MenuBar/%d", window_data->window_id);

@@ -24,8 +24,6 @@
 
 #include <gtk/gtk.h>
 
-#include <appmenu-gtk-action-group.h>
-
 #include "consts.h"
 #include "datastructs.h"
 #include "hijack.h"
